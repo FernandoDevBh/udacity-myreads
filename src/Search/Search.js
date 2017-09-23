@@ -13,8 +13,7 @@ class Search extends Component{
 
     static propTypes ={
         isFetching:PropTypes.bool.isRequired,
-        searchResults:PropTypes.array.isRequired,
-        searchValue:PropTypes.string.isRequired,
+        searchResults:PropTypes.array.isRequired,        
         searchBooks:PropTypes.func.isRequired,
         changeLocationBook:PropTypes.func.isRequired,
     }

@@ -10,6 +10,8 @@ import OpenSearch from './Content/OpenSearch';
 import BookShelf from './Content/BookShelf';
 import Search from './Search/Search';
 
+const NONE = 'none';
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -20,6 +22,7 @@ class App extends Component {
       wantToRead: [],
       currentReading: []
     };
+    
     this.shelfs = [
       {id:'currentlyReading', title:'Lendo Atualmente' },
       {id:'wantToRead', title:'Quero Ler' },
@@ -31,7 +34,7 @@ class App extends Component {
     Api
       .getAll()
       .then((books) => {
-        this.setState((state, props) => {
+        this.setState((state) => {
           const read = books.filter(e => e.shelf === 'read');
           const wantToRead = books.filter(e => e.shelf === 'wantToRead');
           const currentlyReading = books.filter(e => e.shelf === 'currentlyReading');
@@ -56,10 +59,12 @@ class App extends Component {
         ];
       } 
 
-      updObject[shelfChange] = [
-        ...this.state[shelfChange],
-        updBook
-      ];
+      if(shelfChange !== NONE){
+        updObject[shelfChange] = [
+          ...this.state[shelfChange],
+          updBook
+        ];
+      }
 
       const searchIdx = state.searchResults.findIndex(b => b.id === updBook.id );
       
@@ -97,7 +102,7 @@ class App extends Component {
         if (idx >= 0) {
           b.shelf = localBooks[idx].shelf;
         }else{
-          b.shelf = 'none';
+          b.shelf = NONE;
         }
       });
     }
@@ -140,19 +145,18 @@ class App extends Component {
           <Route exact path='/' render={() => (
             <Content>
               <OpenSearch />
-              {this.shelfs.map((b, i) => (
+              {this.shelfs.map((shelf, i) => (
                   <BookShelf
                     key={i}
-                    title={b.title} 
-                    books={this.state[b.id]} 
+                    title={shelf.title} 
+                    books={this.state[shelf.id]} 
                     changeLocationBook={this.changeLocationBook} />))}              
             </Content>
           ) } />
           <Route path='/search' render={() =>(
             <Search
               isFetching={isFetching}
-              searchResults={this.state.searchResults}
-              searchValue={this.state.searchValue} 
+              searchResults={this.state.searchResults}          
               searchBooks={this.searchBooks}              
               changeLocationBook={this.changeLocationBook}
               />

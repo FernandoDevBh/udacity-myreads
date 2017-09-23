@@ -27,24 +27,23 @@ class Book extends Component{
         const { book = null, changeLocationBook } = this.props;
         if(!book){
             return null;
-        }else{
-            const bookMove = {            
-                shelfOptions:this.shelfOptions,
-                changeLocationBook,
-                bookId: book.id,
-                currentShelf:book.shelf
-            };
-            return (
-                <div className='book'>
-                    {!this.state.showContext ? null : <BookMove {...bookMove} /> }
-                    <img style={{height:'200px', width:'140px'}} src={book.imageLinks.smallThumbnail} alt={book.title}/>
-                    <Button onClick={this.shelfOptions} floating className='green' waves='light' icon='arrow_drop_down' style={{bottom: '25px', left: '120px'}}>                                    
-                    </Button>                                    
-                    <p className='book-title'>{book.title}</p>
-                    {this.joinAuthor(book.authors)}                
-                </div>
-            )
         }
+        const bookMove = {            
+            shelfOptions:this.shelfOptions,
+            changeLocationBook,
+            bookId: book.id,
+            currentShelf:book.shelf
+        };
+        return (
+            <div className='book'>
+                {!this.state.showContext ? null : <BookMove {...bookMove} /> }
+                <img style={{height:'200px', width:'140px'}} src={book.imageLinks.smallThumbnail} alt={book.title}/>
+                <Button onClick={this.shelfOptions} floating className='green' waves='light' icon='arrow_drop_down' style={{bottom: '25px', left: '120px'}}>                                    
+                </Button>                                    
+                <p className='book-title'>{book.title}</p>
+                {this.joinAuthor(book.authors)}                
+            </div>
+        )        
     }
 }
 
