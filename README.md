@@ -6,8 +6,15 @@ Myreads é projeto definido pela udacity react nanodegree, para explorar os conh
 ````
   git clone -b master udacity-myreads
   cd udacity-myreads-master
-  npm install
+  npm install  
 ````
+
+## Execução:
+```
+npm start
+
+```
+
 ## Sobre o projeto
 
 Myreads foi projeto para gerenciar as suas estantes de livros em três categorias que são:

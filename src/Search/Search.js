@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { Input } from 'react-materialize';
 import BookGrid from '../Content/BookGrid';
+import { search } from '../BooksAPI';
 
 class Search extends Component{
     constructor(props){
@@ -13,12 +14,27 @@ class Search extends Component{
 
     static propTypes ={
         isFetching:PropTypes.bool.isRequired,
-        searchResults:PropTypes.array.isRequired,        
-        searchBooks:PropTypes.func.isRequired,
+        searchResults:PropTypes.array.isRequired, 
+        updateSearchResults:PropTypes.func.isRequired,
         changeLocationBook:PropTypes.func.isRequired,
+        changeIsFetching:PropTypes.func.isRequired,
     }
 
     onChange = (e) => this.setState({value: e.target.value})
+
+    searchBooks = ({ value }) =>{
+        const { changeIsFetching, updateSearchResults } = this.props;
+        if(value){            
+            changeIsFetching();
+            search(value, 40)
+                .then(books =>{
+                    const checkedBooks = Array.isArray(books) ? books : [];
+                    updateSearchResults(checkedBooks);
+                });
+        }else{
+            updateSearchResults([]);
+        }
+    }
 
     render(){
         const { isFetching } = this.props;
@@ -37,7 +53,7 @@ class Search extends Component{
                         onKeyUp={(e) =>{                            
                             clearTimeout(this.timeout);
                             this.timeout = setTimeout(() => {
-                                this.props.searchBooks(this.state.value);
+                                this.searchBooks(this.state);
                             }, 500);
                         }}                  
                         label='Pesquisar Livros'

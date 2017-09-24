@@ -88,6 +88,8 @@ class App extends Component {
         Api.update({id}, shelfChange)
            .then(res => Api.get(id))
            .then(updBook =>this.updateShelfs({currentShelf, shelfChange, updBook}));
+      }else{
+        this.setState({isFetching:false});
       }
     }    
   }
@@ -109,30 +111,19 @@ class App extends Component {
     return result;
   }
 
-  searchBooks = searchValue =>{          
-      if(searchValue){
-        this.setState(state => {
-          return {
-            ...state,
-            isFetching: !state.isFetching
-          };
-        });
-        Api.search(searchValue, 40)
-          .then(books => this.setState(state => {                         
-              return {
-                ...state,
-                isFetching:false,
-                searchResults:this.complementBookInformation(books, state)
-              };
-            }))
-      }else{
-        this.setState(state => {
-          return {
-            ...state,
-            searchResults:[]
-          }
-        });
-      }
+  changeIsFetching = () =>{
+    this.setState((state) =>({
+      ...state,
+      isFetching: !state.isFetching
+    }))
+  }
+
+  updateSearchResults = (books =[]) =>{
+    this.setState((state) =>({
+      ...state,
+      isFetching:false,
+      searchResults:this.complementBookInformation(books, state)
+    }));
   }
 
   render() {
@@ -156,8 +147,9 @@ class App extends Component {
           <Route path='/search' render={() =>(
             <Search
               isFetching={isFetching}
-              searchResults={this.state.searchResults}          
-              searchBooks={this.searchBooks}              
+              changeIsFetching={this.changeIsFetching}
+              updateSearchResults={this.updateSearchResults}
+              searchResults={this.state.searchResults}                     
               changeLocationBook={this.changeLocationBook}
               />
           )} />
